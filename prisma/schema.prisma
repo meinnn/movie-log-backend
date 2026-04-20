@@ -22,7 +22,7 @@ model Record {
   userId      Int
   tmdbMovieId Int
   watchedAt   DateTime
-  rating      Float
+  rating      Float?
   memo        String?
   quote       String?
   createdAt   DateTime @default(now())
