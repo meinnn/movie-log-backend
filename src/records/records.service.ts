@@ -17,6 +17,23 @@ export interface RecordResult {
 export class RecordsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findByMonth(
+    userId: number,
+    year: number,
+    month: number,
+  ): Promise<RecordResult[]> {
+    return this.prisma.record.findMany({
+      where: {
+        userId,
+        watchedAt: {
+          gte: new Date(year, month - 1, 1),
+          lt: new Date(year, month, 1),
+        },
+      },
+      orderBy: { watchedAt: 'asc' },
+    });
+  }
+
   async create(userId: number, dto: CreateRecordDto): Promise<RecordResult> {
     return this.prisma.record.create({
       data: {
