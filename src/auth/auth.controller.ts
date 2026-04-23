@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
 
 interface SignupResult {
   id: number;
@@ -8,12 +9,22 @@ interface SignupResult {
   nickname: string;
 }
 
+interface LoginResult {
+  accessToken: string;
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async signup(@Body() dto: SignupDto): Promise<SignupResult> {
+  signup(@Body() dto: SignupDto): Promise<SignupResult> {
     return this.authService.signup(dto);
+  }
+
+  @Post('login')
+  @HttpCode(200)
+  login(@Body() dto: LoginDto): Promise<LoginResult> {
+    return this.authService.login(dto);
   }
 }
