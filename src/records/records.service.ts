@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { UpdateRecordDto } from './dto/update-record.dto';
 
 export interface RecordResult {
   id: number;
@@ -50,6 +51,22 @@ export class RecordsService {
     }
 
     return record;
+  }
+
+  async update(
+    userId: number,
+    id: number,
+    dto: UpdateRecordDto,
+  ): Promise<RecordResult> {
+    await this.findOne(userId, id);
+
+    return this.prisma.record.update({
+      where: { id },
+      data: {
+        ...dto,
+        watchedAt: dto.watchedAt ? new Date(dto.watchedAt) : undefined,
+      },
+    });
   }
 
   async create(userId: number, dto: CreateRecordDto): Promise<RecordResult> {

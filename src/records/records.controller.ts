@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -13,6 +14,7 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 import type { JwtUser } from '../auth/jwt.strategy';
 import { RecordsService, RecordResult } from './records.service';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { UpdateRecordDto } from './dto/update-record.dto';
 
 @Controller('records')
 export class RecordsController {
@@ -35,6 +37,16 @@ export class RecordsController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<RecordResult> {
     return this.recordsService.findOne(user.userId, id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  update(
+    @GetUser() user: JwtUser,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateRecordDto,
+  ): Promise<RecordResult> {
+    return this.recordsService.update(user.userId, id, dto);
   }
 
   @Post()
