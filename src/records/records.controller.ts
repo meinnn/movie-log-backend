@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -25,6 +26,15 @@ export class RecordsController {
     @Query('month', ParseIntPipe) month: number,
   ): Promise<RecordResult[]> {
     return this.recordsService.findByMonth(user.userId, year, month);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  findOne(
+    @GetUser() user: JwtUser,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<RecordResult> {
+    return this.recordsService.findOne(user.userId, id);
   }
 
   @Post()

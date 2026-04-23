@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 
@@ -32,6 +36,20 @@ export class RecordsService {
       },
       orderBy: { watchedAt: 'asc' },
     });
+  }
+
+  async findOne(userId: number, id: number): Promise<RecordResult> {
+    const record = await this.prisma.record.findUnique({ where: { id } });
+
+    if (!record) {
+      throw new NotFoundException('기록을 찾을 수 없습니다.');
+    }
+
+    if (record.userId !== userId) {
+      throw new ForbiddenException('접근 권한이 없습니다.');
+    }
+
+    return record;
   }
 
   async create(userId: number, dto: CreateRecordDto): Promise<RecordResult> {
