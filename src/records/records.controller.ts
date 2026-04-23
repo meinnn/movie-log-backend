@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -37,6 +38,15 @@ export class RecordsController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<RecordResult> {
     return this.recordsService.findOne(user.userId, id);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  remove(
+    @GetUser() user: JwtUser,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ id: number }> {
+    return this.recordsService.remove(user.userId, id);
   }
 
   @Patch(':id')

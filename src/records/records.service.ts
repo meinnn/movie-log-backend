@@ -53,6 +53,14 @@ export class RecordsService {
     return record;
   }
 
+  async remove(userId: number, id: number): Promise<{ id: number }> {
+    await this.findOne(userId, id);
+
+    await this.prisma.record.delete({ where: { id } });
+
+    return { id };
+  }
+
   async update(
     userId: number,
     id: number,
