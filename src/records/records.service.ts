@@ -6,17 +6,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
-
-export interface RecordResult {
-  id: number;
-  userId: number;
-  tmdbMovieId: number;
-  watchedAt: Date;
-  rating: number | null;
-  memo: string | null;
-  quote: string | null;
-  createdAt: Date;
-}
+import { RecordResponseDto } from './dto/record-response.dto';
+import { DeleteRecordResponseDto } from './dto/delete-record-response.dto';
 
 @Injectable()
 export class RecordsService {
@@ -26,7 +17,7 @@ export class RecordsService {
     userId: number,
     year: number,
     month: number,
-  ): Promise<RecordResult[]> {
+  ): Promise<RecordResponseDto[]> {
     return this.prisma.record.findMany({
       where: {
         userId,
@@ -39,7 +30,7 @@ export class RecordsService {
     });
   }
 
-  async findOne(userId: number, id: number): Promise<RecordResult> {
+  async findOne(userId: number, id: number): Promise<RecordResponseDto> {
     const record = await this.prisma.record.findUnique({ where: { id } });
 
     if (!record) {
@@ -53,7 +44,7 @@ export class RecordsService {
     return record;
   }
 
-  async remove(userId: number, id: number): Promise<{ id: number }> {
+  async remove(userId: number, id: number): Promise<DeleteRecordResponseDto> {
     await this.findOne(userId, id);
 
     await this.prisma.record.delete({ where: { id } });
@@ -65,7 +56,7 @@ export class RecordsService {
     userId: number,
     id: number,
     dto: UpdateRecordDto,
-  ): Promise<RecordResult> {
+  ): Promise<RecordResponseDto> {
     await this.findOne(userId, id);
 
     return this.prisma.record.update({
@@ -77,7 +68,7 @@ export class RecordsService {
     });
   }
 
-  async create(userId: number, dto: CreateRecordDto): Promise<RecordResult> {
+  async create(userId: number, dto: CreateRecordDto): Promise<RecordResponseDto> {
     return this.prisma.record.create({
       data: {
         userId,

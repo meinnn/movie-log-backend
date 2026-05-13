@@ -25,14 +25,18 @@ src/
 │   ├── jwt.strategy.ts
 │   └── dto/
 │       ├── signup.dto.ts
-│       └── login.dto.ts
+│       ├── login.dto.ts
+│       ├── signup-response.dto.ts
+│       └── login-response.dto.ts
 ├── records/
 │   ├── records.module.ts
 │   ├── records.controller.ts
 │   ├── records.service.ts
 │   └── dto/
 │       ├── create-record.dto.ts
-│       └── update-record.dto.ts
+│       ├── update-record.dto.ts
+│       ├── record-response.dto.ts
+│       └── delete-record-response.dto.ts
 ├── prisma/
 │   ├── prisma.module.ts
 │   └── prisma.service.ts
@@ -137,6 +141,7 @@ model Record {
 - 매직 넘버 금지 — 상수로 분리
 - 주석보다 자명한 네이밍 우선
 - 모든 엔드포인트는 DTO + class-validator로 유효성 검사
+- Response DTO는 plain class로 작성 — `@ApiProperty()` 불필요 (`@nestjs/swagger` 플러그인이 자동 추론)
 
 ### 인증
 
