@@ -8,18 +8,10 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { SignupResponseDto } from './dto/signup-response.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 const BCRYPT_SALT_ROUNDS = 10;
-
-interface SignupResult {
-  id: number;
-  email: string;
-  nickname: string;
-}
-
-interface LoginResult {
-  accessToken: string;
-}
 
 @Injectable()
 export class AuthService {
@@ -28,7 +20,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signup(dto: SignupDto): Promise<SignupResult> {
+  async signup(dto: SignupDto): Promise<SignupResponseDto> {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -53,7 +45,7 @@ export class AuthService {
     });
   }
 
-  async login(dto: LoginDto): Promise<LoginResult> {
+  async login(dto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });

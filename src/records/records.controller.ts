@@ -13,9 +13,11 @@ import {
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import type { JwtUser } from '../auth/jwt.strategy';
-import { RecordsService, RecordResult } from './records.service';
+import { RecordsService } from './records.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
+import { RecordResponseDto } from './dto/record-response.dto';
+import { DeleteRecordResponseDto } from './dto/delete-record-response.dto';
 
 @Controller('records')
 export class RecordsController {
@@ -27,7 +29,7 @@ export class RecordsController {
     @GetUser() user: JwtUser,
     @Query('year', ParseIntPipe) year: number,
     @Query('month', ParseIntPipe) month: number,
-  ): Promise<RecordResult[]> {
+  ): Promise<RecordResponseDto[]> {
     return this.recordsService.findByMonth(user.userId, year, month);
   }
 
@@ -36,7 +38,7 @@ export class RecordsController {
   findOne(
     @GetUser() user: JwtUser,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<RecordResult> {
+  ): Promise<RecordResponseDto> {
     return this.recordsService.findOne(user.userId, id);
   }
 
@@ -45,7 +47,7 @@ export class RecordsController {
   remove(
     @GetUser() user: JwtUser,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<{ id: number }> {
+  ): Promise<DeleteRecordResponseDto> {
     return this.recordsService.remove(user.userId, id);
   }
 
@@ -55,7 +57,7 @@ export class RecordsController {
     @GetUser() user: JwtUser,
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateRecordDto,
-  ): Promise<RecordResult> {
+  ): Promise<RecordResponseDto> {
     return this.recordsService.update(user.userId, id, dto);
   }
 
@@ -64,7 +66,7 @@ export class RecordsController {
   create(
     @GetUser() user: JwtUser,
     @Body() dto: CreateRecordDto,
-  ): Promise<RecordResult> {
+  ): Promise<RecordResponseDto> {
     return this.recordsService.create(user.userId, dto);
   }
 }
