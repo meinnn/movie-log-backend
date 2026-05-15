@@ -25,15 +25,15 @@
 
 ## API 엔드포인트
 
-| Method | Endpoint | 인증 | 설명 |
-|--------|----------|:----:|------|
-| POST | `/auth/signup` | | 회원가입 |
-| POST | `/auth/login` | | 로그인 (JWT 발급) |
-| POST | `/records` | Bearer | 영화 기록 생성 |
-| GET | `/records?year=&month=` | Bearer | 월별 기록 조회 |
-| GET | `/records/:id` | Bearer | 기록 단건 조회 |
-| PATCH | `/records/:id` | Bearer | 기록 수정 |
-| DELETE | `/records/:id` | Bearer | 기록 삭제 |
+| Method | Endpoint                       |  인증  | 설명                |
+| ------ | ------------------------------ | :----: | ------------------- |
+| POST   | `/auth/signup`                 |        | 회원가입            |
+| POST   | `/auth/login`                  |        | 로그인 (JWT 발급)   |
+| POST   | `/records`                     | Bearer | 영화 기록 생성      |
+| GET    | `/records?startDate=&endDate=` | Bearer | 날짜 범위 기록 조회 |
+| GET    | `/records/:id`                 | Bearer | 기록 단건 조회      |
+| PATCH  | `/records/:id`                 | Bearer | 기록 수정           |
+| DELETE | `/records/:id`                 | Bearer | 기록 삭제           |
 
 ---
 
