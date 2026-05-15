@@ -110,13 +110,13 @@ describe('Records (e2e)', () => {
   describe('GET /records', () => {
     it('토큰 없이 요청하면 401을 반환한다', () => {
       return request(app.getHttpServer())
-        .get('/records?year=2026&month=4')
+        .get('/records?startDate=2026-04-01&endDate=2026-04-30')
         .expect(401);
     });
 
-    it('해당 월의 기록 목록을 반환한다', async () => {
+    it('날짜 범위 내 기록 목록을 반환한다', async () => {
       const res = await request(app.getHttpServer())
-        .get('/records?year=2026&month=4')
+        .get('/records?startDate=2026-04-01&endDate=2026-04-30')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
@@ -125,9 +125,9 @@ describe('Records (e2e)', () => {
       expect(body.some((r) => r.id === recordId)).toBe(true);
     });
 
-    it('다른 달 조회 시 빈 배열을 반환한다', async () => {
+    it('범위 밖 날짜 조회 시 빈 배열을 반환한다', async () => {
       const res = await request(app.getHttpServer())
-        .get('/records?year=2026&month=3')
+        .get('/records?startDate=2026-03-01&endDate=2026-03-31')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 

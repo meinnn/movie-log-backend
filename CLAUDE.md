@@ -90,9 +90,11 @@ model Record {
 - **Response 201**: 생성된 record 전체
 - **Error**: 401
 
-### GET /records?year=2026&month=4
+### GET /records?startDate=2026-03-30&endDate=2026-05-03
 
 - **Header**: `Authorization: Bearer {accessToken}`
+- **Query**: `startDate` (YYYY-MM-DD), `endDate` (YYYY-MM-DD)
+- **설명**: 캘린더 뷰에서 보이는 첫 번째 날(일요일)부터 마지막 날(토요일)까지 조회. 이전달/다음달 날짜가 캘린더에 보이는 경우도 커버함.
 - **Response 200**: record 배열
 - **Error**: 401
 

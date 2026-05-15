@@ -13,17 +13,17 @@ import { DeleteRecordResponseDto } from './dto/delete-record-response.dto';
 export class RecordsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findByMonth(
+  async findByDateRange(
     userId: number,
-    year: number,
-    month: number,
+    startDate: string,
+    endDate: string,
   ): Promise<RecordResponseDto[]> {
     return this.prisma.record.findMany({
       where: {
         userId,
         watchedAt: {
-          gte: new Date(year, month - 1, 1),
-          lt: new Date(year, month, 1),
+          gte: new Date(startDate),
+          lte: new Date(`${endDate}T23:59:59.999Z`),
         },
       },
       orderBy: { watchedAt: 'asc' },
@@ -68,7 +68,10 @@ export class RecordsService {
     });
   }
 
-  async create(userId: number, dto: CreateRecordDto): Promise<RecordResponseDto> {
+  async create(
+    userId: number,
+    dto: CreateRecordDto,
+  ): Promise<RecordResponseDto> {
     return this.prisma.record.create({
       data: {
         userId,

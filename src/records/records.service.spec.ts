@@ -74,16 +74,23 @@ describe('RecordsService', () => {
     });
   });
 
-  describe('findByMonth', () => {
-    it('해당 월의 기록 목록을 반환한다', async () => {
+  describe('findByDateRange', () => {
+    it('날짜 범위 내 기록 목록을 반환한다', async () => {
       mockPrisma.record.findMany.mockResolvedValue([mockRecord]);
 
-      const result = await service.findByMonth(1, 2026, 4);
+      const result = await service.findByDateRange(
+        1,
+        '2026-04-01',
+        '2026-04-30',
+      );
 
       expect(mockPrisma.record.findMany).toHaveBeenCalledWith({
         where: {
           userId: 1,
-          watchedAt: { gte: new Date(2026, 3, 1), lt: new Date(2026, 4, 1) },
+          watchedAt: {
+            gte: new Date('2026-04-01'),
+            lte: new Date('2026-04-30T23:59:59.999Z'),
+          },
         },
         orderBy: { watchedAt: 'asc' },
       });
