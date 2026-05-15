@@ -18,6 +18,7 @@ import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { RecordResponseDto } from './dto/record-response.dto';
 import { DeleteRecordResponseDto } from './dto/delete-record-response.dto';
+import { GetRecordsQueryDto } from './dto/get-records-query.dto';
 
 @Controller('records')
 export class RecordsController {
@@ -25,12 +26,15 @@ export class RecordsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findByMonth(
+  findByDateRange(
     @GetUser() user: JwtUser,
-    @Query('year', ParseIntPipe) year: number,
-    @Query('month', ParseIntPipe) month: number,
+    @Query() query: GetRecordsQueryDto,
   ): Promise<RecordResponseDto[]> {
-    return this.recordsService.findByMonth(user.userId, year, month);
+    return this.recordsService.findByDateRange(
+      user.userId,
+      query.startDate,
+      query.endDate,
+    );
   }
 
   @Get(':id')
